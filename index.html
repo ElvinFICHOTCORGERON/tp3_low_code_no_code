@@ -6,19 +6,22 @@
     <title>Les Tours de Hanoï - TP M1 IL</title>
     <link rel="stylesheet" href="style.css"> 
 </head>
-<body>
-
-    <header>
+<body class="theme-clair"> <header>
         <h1>Le Jeu des Tours de Hanoï</h1>
     </header>
 
     <main>
         
         <section id="controles">
-            <label for="nombreDisques">Nombre d'anneaux (min 3, max 8) :</label>
+            <label for="nombreDisques">Anneaux (3-8) :</label>
             <input type="number" id="nombreDisques" name="nombreDisques" min="3" max="8" value="3">
-            <button id="demarrerJeu">Démarrer le jeu</button>
-            <button id="demoAutomatique" disabled>Démo Automatique</button> </section>
+            
+            <button id="demarrerJeu" class="btn-action">Démarrer</button>
+            <button id="demoAutomatique" class="btn-action" disabled>Démo Auto</button>
+            <button id="resetJeu" class="btn-action" disabled>Réinitialiser</button> <div id="stats">
+                <span id="compteurCoups">Coups: 0</span> <span id="scoreMinimal">Optimal: 7</span> </div>
+            
+            <button id="toggleTheme" class="btn-theme">Mode Sombre</button> </section>
         
         <section id="aireDeJeu">
             

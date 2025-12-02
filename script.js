@@ -1,7 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const nombreDisquesInput = document.getElementById("nombreDisques");
   const demarrerBouton = document.getElementById("demarrerJeu");
-  const demoBouton = document.getElementById("demoAutomatique"); // NOUVEAU SÉLECTEUR
+  const demoBouton = document.getElementById("demoAutomatique");
+  const resetBouton = document.getElementById("resetJeu"); // NOUVEAU SÉLECTEUR
+  const toggleThemeBouton = document.getElementById("toggleTheme"); // NOUVEAU SÉLECTEUR
+
+  const compteurCoupsSpan = document.getElementById("compteurCoups");
+  const scoreMinimalSpan = document.getElementById("scoreMinimal");
 
   const tour1 = document.getElementById("tour-1");
   const tour2 = document.getElementById("tour-2");
@@ -15,126 +20,55 @@ document.addEventListener("DOMContentLoaded", () => {
   let disqueSelectionne = null;
   let estEnCoursDeJeu = false;
 
-  // NOUVELLES VARIABLES POUR LA DÉMO
+  // NOUVELLES VARIABLES D'ÉTAT ET STATS
   let estDemoEnCours = false;
   let sequenceDeMouvements = [];
-  const DELAI_MOUVEMENT = 500; // Délai en ms pour chaque étape de l'animation
+  let coupsActuels = 0; // Compteur de coups
+  let nbDisquesInitial = 0;
+  const DELAI_MOUVEMENT = 500;
 
   // -------------------------------------------------------------------
-  // FONCTIONS UTILITAIRES DE DÉMO
+  // I. LOGIQUE D'ÉTAT ET STATS
   // -------------------------------------------------------------------
 
-  /**
-   * Crée une promesse pour attendre un certain délai (ms).
-   * Utilisé avec 'await' pour mettre la démo en pause entre les mouvements.
-   */
-  function attendre(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+  function mettreAJourCompteur() {
+    coupsActuels++;
+    compteurCoupsSpan.textContent = `Coups: ${coupsActuels}`;
+  }
+
+  function mettreAJourScoreOptimal(N) {
+    nbDisquesInitial = N;
+    // Calcul du score minimal : (2^n) - 1
+    const scoreMin = Math.pow(2, N) - 1;
+    scoreMinimalSpan.textContent = `Optimal: ${scoreMin}`;
   }
 
   /**
-   * ALGORITHME RÉCURSIF DES TOURS DE HANOÏ
-   * Calcule la séquence de mouvements optimaux.
-   * @param {number} n - Le nombre de disques à déplacer.
-   * @param {string} sourceId - ID de la tour source.
-   * @param {string} cibleId - ID de la tour cible.
-   * @param {string} auxiliaireId - ID de la tour auxiliaire.
+   * Réinitialise l'état du jeu à son initialisation (vide).
    */
-  function deplacerDisquesHanoi(n, sourceId, cibleId, auxiliaireId) {
-    if (n === 0) return;
-
-    // 1. Déplacer n-1 disques de la Source à l'Auxiliaire (en utilisant la Cible)
-    deplacerDisquesHanoi(n - 1, sourceId, auxiliaireId, cibleId);
-
-    // 2. Déplacer le n-ième disque (le plus grand) de la Source à la Cible
-    // On stocke le mouvement (ID de la source et ID de la cible)
-    sequenceDeMouvements.push({
-      source: sourceId,
-      cible: cibleId,
-    });
-
-    // 3. Déplacer n-1 disques de l'Auxiliaire à la Cible (en utilisant la Source)
-    deplacerDisquesHanoi(n - 1, auxiliaireId, cibleId, sourceId);
-  }
-
-  /**
-   * Exécute un mouvement de la séquence avec des animations et un délai.
-   */
-  async function executerMouvementVisuel(sourceTourId, cibleTourId) {
-    const tourSource = document.getElementById(sourceTourId);
-    const tourCible = document.getElementById(cibleTourId);
-
-    // Le disque à déplacer est toujours le dernier enfant de la source
-    const disqueAMouvoir = tourSource.querySelector(".disque:last-child");
-
-    if (!disqueAMouvoir) {
-      console.error("Erreur démo : Disque introuvable.");
-      return;
-    }
-
-    // 1. VISUALISATION : Sélection du disque
-    disqueAMouvoir.classList.add("selectionne");
-    await attendre(DELAI_MOUVEMENT / 2);
-
-    // 2. MOUVEMENT : Transfert DOM du disque
-    tourCible.appendChild(disqueAMouvoir);
-
-    // 3. VISUALISATION : Désélection
-    disqueAMouvoir.classList.remove("selectionne");
-    await attendre(DELAI_MOUVEMENT / 2); // Délai avant le prochain mouvement
-  }
-
-  /**
-   * Fonction principale pour lancer la démo après calcul de l'algorithme.
-   */
-  async function lancerDemoAutomatique() {
-    // Contrainte : Ne pas lancer si la partie n'est pas lancée ou si la démo est déjà en cours
-    if (!estEnCoursDeJeu || estDemoEnCours) {
-      alert("Veuillez d'abord Démarrer le jeu.");
-      return;
-    }
-
-    estDemoEnCours = true;
-
-    // Désactiver les contrôles utilisateur/jeu pendant la démo
-    demarrerBouton.disabled = true;
-    demoBouton.disabled = true;
-    tours.forEach((tour) => tour.removeEventListener("click", gererClicTour));
-    tours.forEach((tour) =>
-      tour
-        .querySelectorAll(".disque")
-        .forEach((d) => d.removeEventListener("click", gererClicDisque))
-    );
-
-    // 1. Calculer la séquence optimale
-    sequenceDeMouvements = [];
-    const N = parseInt(nombreDisquesInput.value);
-
-    // Algorithme standard : de tour-1 à tour-3 en utilisant tour-2
-    deplacerDisquesHanoi(N, "tour-1", "tour-3", "tour-2");
-
-    console.log(
-      `Début de la résolution pour ${N} disques (${sequenceDeMouvements.length} coups requis)...`
-    );
-
-    // 2. Exécuter chaque mouvement visuellement
-    for (const mouvement of sequenceDeMouvements) {
-      await executerMouvementVisuel(mouvement.source, mouvement.cible);
-    }
-
-    alert("Démonstration terminée !");
-
-    // Rétablir l'état
-    estDemoEnCours = false;
-    estEnCoursDeJeu = false;
-    demarrerBouton.disabled = false;
-
-    // Nettoyer pour un éventuel redémarrage
+  function reinitialiserJeu() {
     nettoyerTours();
+
+    coupsActuels = 0;
+    compteurCoupsSpan.textContent = `Coups: 0`;
+    scoreMinimalSpan.textContent = `Optimal: ${
+      Math.pow(2, parseInt(nombreDisquesInput.value)) - 1
+    }`;
+
+    estEnCoursDeJeu = false;
+    estDemoEnCours = false;
+    disqueSelectionne = null;
+
+    // Mettre à jour les contrôles
+    demarrerBouton.disabled = false;
+    demoBouton.disabled = true;
+    resetBouton.disabled = true;
+
+    console.log("Jeu réinitialisé.");
   }
 
   // -------------------------------------------------------------------
-  // LOGIQUE D'INITIALISATION ET DE JEU (Mise à jour pour la démo)
+  // II. INITIALISATION ET NETTOYAGE
   // -------------------------------------------------------------------
 
   function nettoyerTours() {
@@ -149,7 +83,12 @@ document.addEventListener("DOMContentLoaded", () => {
     nettoyerTours();
     estEnCoursDeJeu = true;
     estDemoEnCours = false;
-    demoBouton.disabled = false; // Activer le bouton de démo
+    demarrerBouton.disabled = true;
+    demoBouton.disabled = false;
+    resetBouton.disabled = false;
+    coupsActuels = 0;
+    mettreAJourScoreOptimal(N);
+    compteurCoupsSpan.textContent = `Coups: 0`;
 
     const ecartLargeur = (LARGEUR_MAX_DISQUE - LARGEUR_MIN_DISQUE) / (N - 1);
 
@@ -166,7 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     tours.forEach((tour) => {
-      // S'assurer que les écouteurs sont attachés pour le mode joueur
       tour.removeEventListener("click", gererClicTour);
       tour.addEventListener("click", gererClicTour);
     });
@@ -174,14 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log(`Jeu initialisé avec ${N} disques sur la Tour 1.`);
   }
 
-  // GESTIONNAIRES DE CLIC JOUEUR (bloqués pendant la démo)
+  // -------------------------------------------------------------------
+  // III. LOGIQUE DU MODE JOUEUR
+  // -------------------------------------------------------------------
 
+  // ... (gererClicDisque inchangé, à l'exception de l'ajout du blocage de la démo) ...
   function gererClicDisque(e) {
-    // Bloquer si la démo est en cours
     if (!estEnCoursDeJeu || estDemoEnCours) return;
 
     const disqueClique = e.currentTarget;
-    // ... (reste de la logique de sélection inchangée) ...
+
     if (disqueSelectionne === disqueClique) {
       disqueSelectionne.classList.remove("selectionne");
       disqueSelectionne = null;
@@ -200,11 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function gererClicTour(e) {
-    // Bloquer si la démo est en cours
     if (!estEnCoursDeJeu || !disqueSelectionne || estDemoEnCours) return;
 
     const tourCible = e.currentTarget;
-    // ... (reste de la logique de déplacement et validation inchangée) ...
     const disqueDuDessus = tourCible.querySelector(".disque:last-child");
     const tailleDisqueSelectionne = parseInt(disqueSelectionne.dataset.taille);
 
@@ -221,6 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (mouvementValide) {
+      // AJOUT DU COMPTEUR
+      mettreAJourCompteur();
+
       tourCible.appendChild(disqueSelectionne);
       disqueSelectionne.classList.remove("selectionne");
       disqueSelectionne = null;
@@ -229,36 +170,145 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  /**
+   * Détecte la victoire et affiche le score.
+   */
   function verifierFinJeu() {
-    const nombreDisques = parseInt(nombreDisquesInput.value);
-
-    if (
-      tour2.querySelectorAll(".disque").length === nombreDisques ||
-      tour3.querySelectorAll(".disque").length === nombreDisques
-    ) {
+    // La règle exige que la victoire soit sur la dernière tour (tour-3)
+    if (tour3.querySelectorAll(".disque").length === nbDisquesInitial) {
       estEnCoursDeJeu = false;
       demoBouton.disabled = true;
-      alert(
-        `Félicitations ! Vous avez complété le jeu des Tours de Hanoï avec ${nombreDisques} disques !`
-      );
+      resetBouton.disabled = false;
+
+      const scoreMinimal = Math.pow(2, nbDisquesInitial) - 1;
+      let message = `Félicitations ! Vous avez terminé le jeu en ${coupsActuels} coups.`;
+
+      if (coupsActuels === scoreMinimal) {
+        message += ` Vous avez atteint le score minimal de ${scoreMinimal} coups ! (Score Parfait)`;
+      } else {
+        message += ` Le score optimal était de ${scoreMinimal} coups.`;
+      }
+
+      alert(message);
     }
   }
 
-  // ÉCOUTEURS D'ÉVÉNEMENTS
+  // -------------------------------------------------------------------
+  // IV. LOGIQUE DU MODE AUTOMATIQUE (Mise à jour pour le compteur)
+  // -------------------------------------------------------------------
+
+  function attendre(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  function deplacerDisquesHanoi(n, sourceId, cibleId, auxiliaireId) {
+    if (n === 0) return;
+    deplacerDisquesHanoi(n - 1, sourceId, auxiliaireId, cibleId);
+    sequenceDeMouvements.push({ source: sourceId, cible: cibleId });
+    deplacerDisquesHanoi(n - 1, auxiliaireId, cibleId, sourceId);
+  }
+
+  async function executerMouvementVisuel(sourceTourId, cibleTourId) {
+    const tourSource = document.getElementById(sourceTourId);
+    const tourCible = document.getElementById(cibleTourId);
+    const disqueAMouvoir = tourSource.querySelector(".disque:last-child");
+
+    if (!disqueAMouvoir) return;
+
+    // ANIMATION FLUIDE : L'animation DOM est gérée par le CSS 'transition'
+    // Nous ajoutons simplement la classe pour l'effet de "lift" (transform: translateY)
+    disqueAMouvoir.classList.add("selectionne");
+    await attendre(DELAI_MOUVEMENT / 2);
+
+    // Le glissement est géré par la transition CSS lorsque l'élément change de parent (appendChild)
+    tourCible.appendChild(disqueAMouvoir);
+
+    // Mettre à jour le compteur pour la démo aussi
+    mettreAJourCompteur();
+
+    disqueAMouvoir.classList.remove("selectionne");
+    await attendre(DELAI_MOUVEMENT / 2);
+  }
+
+  async function lancerDemoAutomatique() {
+    if (!estEnCoursDeJeu || estDemoEnCours) {
+      alert("Veuillez d'abord Démarrer le jeu.");
+      return;
+    }
+
+    // Réinitialisation du compteur pour la démo
+    coupsActuels = 0;
+    compteurCoupsSpan.textContent = `Coups: 0`;
+
+    estDemoEnCours = true;
+    demarrerBouton.disabled = true;
+    demoBouton.disabled = true;
+
+    // Désactiver les écouteurs du joueur
+    tours.forEach((tour) => tour.removeEventListener("click", gererClicTour));
+    tours.forEach((tour) =>
+      tour
+        .querySelectorAll(".disque")
+        .forEach((d) => d.removeEventListener("click", gererClicDisque))
+    );
+
+    sequenceDeMouvements = [];
+    const N = parseInt(nombreDisquesInput.value);
+
+    deplacerDisquesHanoi(N, "tour-1", "tour-3", "tour-2");
+
+    for (const mouvement of sequenceDeMouvements) {
+      await executerMouvementVisuel(mouvement.source, mouvement.cible);
+    }
+
+    alert("Démonstration terminée !");
+
+    // Fin de la démo
+    verifierFinJeu();
+    estDemoEnCours = false;
+    demarrerBouton.disabled = true; // Reste désactivé car la partie est finie
+    demoBouton.disabled = true;
+    resetBouton.disabled = false;
+  }
+
+  // -------------------------------------------------------------------
+  // V. GESTION DU THÈME
+  // -------------------------------------------------------------------
+
+  function toggleTheme() {
+    const body = document.body;
+    if (body.classList.contains("theme-clair")) {
+      body.classList.remove("theme-clair");
+      body.classList.add("theme-sombre");
+      toggleThemeBouton.textContent = "Mode Clair";
+    } else {
+      body.classList.remove("theme-sombre");
+      body.classList.add("theme-clair");
+      toggleThemeBouton.textContent = "Mode Sombre";
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // VI. ÉCOUTEURS D'ÉVÉNEMENTS
+  // -------------------------------------------------------------------
   demarrerBouton.addEventListener("click", () => {
     const nombre = parseInt(nombreDisquesInput.value);
-
     if (nombre < 3 || nombre > 8 || isNaN(nombre)) {
       alert("Veuillez choisir un nombre d'anneaux valide entre 3 et 8.");
       return;
     }
-
     initialiserJeu(nombre);
   });
 
-  // NOUVEAU ÉCOUTEUR
   demoBouton.addEventListener("click", lancerDemoAutomatique);
 
-  // Initialisation au chargement pour s'assurer que le HTML est vide
-  nettoyerTours();
+  // NOUVEAU ÉCOUTEUR
+  resetBouton.addEventListener("click", reinitialiserJeu);
+
+  // NOUVEAU ÉCOUTEUR
+  toggleThemeBouton.addEventListener("click", toggleTheme);
+
+  // Initialisation au chargement
+  reinitialiserJeu();
+  mettreAJourScoreOptimal(parseInt(nombreDisquesInput.value));
 });

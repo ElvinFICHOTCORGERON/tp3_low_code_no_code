@@ -83,3 +83,23 @@ Tu ne dois pas pouvoir lancer la démonstration si la partie n'est pas lancé
 Et enfin l'utilisateur doit pouvoir suivre l'avancé de la résolution visuellement
 
 Génère moi donc la totalité des fichiers qui vont changer
+
+Etape 6 
+
+Maintenant que nous avons une résolution automatique nous avons bientôt terminé l'application
+
+Nous allons maintenant nous attardé sur des extensions obligatoires de l'application
+
+L'application doit avoir un compteur de coup qui ajoute un coup à chaque disque bougé que ce soit l'utilisateur où la résolution automatique
+
+L'application doit pouvoir détecter la victoire et envoyé un message de félicitations à l'utilisateur. Rappel de la règle il faut terminer sur la dernière tour pas sur celle du milieu
+
+L'application doit implémenter un système de score, le score se base sur le nombre minimal de coups (2^n – 1)
+
+L'utilisateur doit pouvoir réinitialiser la partie à tous moment ce qui va remettre la partie à l'état initial
+
+Au niveau de l'animation du déplacement des disques elle doit montrer un "glissement fluide"
+
+Pour finir il y doit y avoir un système de gestion de mode sombre/clair
+
+Bien sur pour chaque bouton il doit y avoir un style d'ajouté.

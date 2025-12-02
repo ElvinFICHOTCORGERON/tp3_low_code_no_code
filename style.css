@@ -1,50 +1,64 @@
 /* ====================================================================== */
-/* STYLES DE BASE ET MISE EN PAGE */
+/* STYLES DE BASE ET THÈMES */
 /* ====================================================================== */
 body {
     font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f4f8; /* Arrière-plan doux */
-    color: #2c3e50;
     margin: 0;
     padding: 30px;
+    transition: background-color 0.5s, color 0.5s; /* Transition pour le changement de thème */
 }
 
-header {
-    margin-bottom: 20px;
+/* Thème Clair (Par défaut) */
+.theme-clair {
+    background-color: #f0f4f8;
+    color: #2c3e50;
+}
+.theme-clair #controles {
+    background-color: #ffffff;
+    border-color: #c0d1e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-h1 {
-    color: #3498db; /* Bleu vif */
-    font-weight: 700;
+/* Thème Sombre */
+.theme-sombre {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+.theme-sombre h1 {
+    color: #3498db;
+}
+.theme-sombre #controles {
+    background-color: #34495e;
+    border-color: #1a252f;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.theme-sombre #aireDeJeu {
+    background-color: #34495e;
+    border-color: #1a252f;
+}
+.theme-sombre .socle, .theme-sombre .poteau {
+    background-color: #7f8c8d;
 }
 
 /* Zone de contrôle */
 #controles {
     margin-bottom: 40px;
     padding: 20px;
-    border: 1px solid #c0d1e0;
+    border-width: 1px;
+    border-style: solid;
     border-radius: 12px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     display: flex;
     gap: 15px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-#nombreDisques {
-    padding: 10px;
-    border: 2px solid #3498db;
-    border-radius: 6px;
-    width: 60px;
-    text-align: center;
-}
-
-#demarrerJeu {
+/* Styles des boutons */
+.btn-action {
     padding: 10px 20px;
-    background-color: #2ecc71; /* Vert pour démarrer */
     color: white;
     border: none;
     border-radius: 6px;
@@ -53,12 +67,37 @@ h1 {
     transition: background-color 0.3s, transform 0.1s;
 }
 
-#demarrerJeu:hover {
-    background-color: #27ae60;
+#demarrerJeu { background-color: #2ecc71; } /* Vert pour Démarrer */
+#demarrerJeu:hover { background-color: #27ae60; }
+
+#demoAutomatique { background-color: #3498db; } /* Bleu pour Démo */
+#demoAutomatique:hover { background-color: #2980b9; }
+
+#resetJeu { background-color: #e74c3c; } /* Rouge pour Réinitialiser */
+#resetJeu:hover { background-color: #c0392b; }
+
+.btn-action:disabled {
+    background-color: #bdc3c7 !important;
+    cursor: not-allowed;
 }
 
-#demarrerJeu:active {
-    transform: scale(0.98);
+.btn-theme {
+    padding: 8px 15px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* STATS */
+#stats {
+    padding: 5px 15px;
+    border: 1px solid currentColor;
+    border-radius: 6px;
+    font-weight: bold;
+    display: flex;
+    gap: 20px;
 }
 
 /* ====================================================================== */
@@ -67,7 +106,6 @@ h1 {
 #aireDeJeu {
     display: flex;
     justify-content: space-around;
-    /* Assure assez d'espace entre les tours */
     width: 900px; 
     max-width: 95%; 
     height: 450px; 
@@ -81,13 +119,12 @@ h1 {
 .tour {
     display: flex;
     flex-direction: column-reverse; 
-    align-items: center; /* Centre les disques (ESSENTIEL pour l'alignement) */
-    width: 30%; /* Largeur pour garantir l'espace entre elles */
+    align-items: center;
+    width: 30%; 
     position: relative;
-    /* On définit la hauteur max des disques dans le JS. Ici, on s'assure que la tour est grande */
+    /* Permet aux disques d'être positionnés pour l'animation */
 }
 
-/* Le socle (la base de la tour) */
 .socle {
     width: 95%; 
     height: 25px;
@@ -96,13 +133,12 @@ h1 {
     z-index: 10; 
 }
 
-/* Le poteau (l'axe vertical) */
 .poteau {
     width: 10px; 
-    height: 350px; /* Grande hauteur pour les 8 disques + espacement */
+    height: 350px; 
     background-color: #34495e;
     position: absolute;
-    bottom: 25px; /* Débute juste au-dessus du socle (hauteur du socle) */
+    bottom: 25px; 
     z-index: 5;
 }
 
@@ -111,36 +147,31 @@ h1 {
 /* ====================================================================== */
 .disque {
     height: 30px; 
-    /* Les couleurs de base restent, mais on affine l'ombre pour la profondeur */
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); 
     border-radius: 15px;
-    margin-top: 5px; /* Plus d'espace entre les disques */
+    margin-top: 5px; 
     position: relative;
     z-index: 15;
     
-    /* Animation: transition douce lors de la sélection/désélection */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
-    
-    /* Le disque est centré grâce à align-items: center; sur le parent .tour */
+    /* Le glissement fluide: transition sur transform pour le 'lift' et l'ombre */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s, top 0.5s ease-in-out, left 0.5s ease-in-out; 
 }
 
-/* État sélectionné : animation et indication visuelle forte */
+/* État sélectionné (le disque "flotte" au-dessus) */
 .disque.selectionne {
-    outline: 4px solid #e74c3c; /* Bordure rouge pour la sélection */
+    outline: 4px solid #e74c3c; 
     outline-offset: 3px;
     cursor: grabbing;
-    transform: translateY(-15px) scale(1.02); 
+    transform: translateY(-15px) scale(1.02); /* Décolle légèrement */
     box-shadow: 0 8px 15px rgba(231, 76, 60, 0.5); 
 }
 
-/* Couleurs des disques pour la distinction (utilisé dans le JS avec data-taille) */
-.disque[data-taille="1"] { background-color: #e67e22; } /* Orange */
-.disque[data-taille="2"] { background-color: #f1c40f; } /* Jaune */
-.disque[data-taille="3"] { background-color: #2ecc71; } /* Vert Émeraude */
-.disque[data-taille="4"] { background-color: #3498db; } /* Bleu Clair */
-.disque[data-taille="5"] { background-color: #9b59b6; } /* Améthyste */
-.disque[data-taille="6"] { background-color: #e74c3c; } /* Rouge Tomate */
-.disque[data-taille="7"] { background-color: #1abc9c; } /* Turquoise */
-.disque[data-taille="8"] { background-color: #d35400; } /* Citrouille */
-
-/* Le code HTML et JavaScript précédent est nécessaire pour que ces styles fonctionnent */
+/* Couleurs des disques (inchangées) */
+.disque[data-taille="1"] { background-color: #e67e22; }
+.disque[data-taille="2"] { background-color: #f1c40f; }
+.disque[data-taille="3"] { background-color: #2ecc71; }
+.disque[data-taille="4"] { background-color: #3498db; }
+.disque[data-taille="5"] { background-color: #9b59b6; }
+.disque[data-taille="6"] { background-color: #e74c3c; }
+.disque[data-taille="7"] { background-color: #1abc9c; }
+.disque[data-taille="8"] { background-color: #d35400; }
