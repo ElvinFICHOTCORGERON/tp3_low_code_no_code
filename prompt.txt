@@ -35,3 +35,18 @@ Apparaitre sur la première tour seulement quand la partie démarre au début l'
 Ils doivent être empilés dans le bonne ordre avec le plus grand en bas et le plus petit en haut
 
 Il y doit y avoir le nombre d'anneau choisis dans le champs d'input
+
+
+Prompt 3 
+
+Après la génération d'anneau l'objectif est de pouvoir les déplacer
+
+Toujours dans le but d'améliorer l'existant
+
+Tu vas maintenant implémenter le déplacement des anneaux
+
+Le processus est le suivant
+
+Tu dois cliquer sur un anneau puis tu cliques sur la tour sur laquelle tu dois déplacer l'anneau
+
+Pour les contraintes il y a une règle on ne peux pas poser un anneau sur un anneau plus petit que soi même

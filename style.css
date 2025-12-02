@@ -116,3 +116,9 @@ h1 {
 .disque[data-taille="6"] { background-color: #6f42c1; }
 .disque[data-taille="7"] { background-color: #fd7e14; }
 .disque[data-taille="8"] { background-color: #20c997; }
+
+.disque.selectionne {
+    outline: 4px solid #ff0000; /* Bordure rouge pour indiquer la sélection */
+    outline-offset: 2px;
+    cursor: grabbing;
+}
