@@ -1,124 +1,147 @@
-/* Style général du corps de la page (Rappel de l'étape 1) */
+/* ====================================================================== */
+/* STYLES DE BASE ET MISE EN PAGE */
+/* ====================================================================== */
 body {
-    font-family: sans-serif;
+    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f4f4f9;
+    background-color: #f0f4f8; /* Arrière-plan doux */
+    color: #2c3e50;
     margin: 0;
-    padding: 20px;
+    padding: 30px;
+}
+
+header {
+    margin-bottom: 20px;
 }
 
 h1 {
-    color: #333;
+    color: #3498db; /* Bleu vif */
+    font-weight: 700;
 }
 
 /* Zone de contrôle */
 #controles {
-    margin-bottom: 30px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+    padding: 20px;
+    border: 1px solid #c0d1e0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 15px;
+    align-items: center;
 }
 
 #nombreDisques {
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 10px;
+    border: 2px solid #3498db;
+    border-radius: 6px;
+    width: 60px;
+    text-align: center;
 }
 
 #demarrerJeu {
-    padding: 10px 15px;
-    background-color: #007bff;
+    padding: 10px 20px;
+    background-color: #2ecc71; /* Vert pour démarrer */
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 #demarrerJeu:hover {
-    background-color: #0056b3;
+    background-color: #27ae60;
 }
 
-/* Aire de jeu principale */
+#demarrerJeu:active {
+    transform: scale(0.98);
+}
+
+/* ====================================================================== */
+/* AIRE DE JEU ET TOURS */
+/* ====================================================================== */
 #aireDeJeu {
     display: flex;
     justify-content: space-around;
-    width: 80%;
-    height: 400px;
+    /* Assure assez d'espace entre les tours */
+    width: 900px; 
+    max-width: 95%; 
+    height: 450px; 
     padding: 20px;
-    background-color: #e9ecef;
-    border: 2px solid #333;
-    border-radius: 10px;
+    background-color: #ecf0f1;
+    border: 5px solid #bdc3c7;
+    border-radius: 15px;
+    position: relative;
 }
 
-/* Style de chaque tour */
 .tour {
     display: flex;
-    flex-direction: column-reverse; /* CRUCIAL : Empile les éléments du bas vers le haut */
-    align-items: center;
-    width: 30%;
+    flex-direction: column-reverse; 
+    align-items: center; /* Centre les disques (ESSENTIEL pour l'alignement) */
+    width: 30%; /* Largeur pour garantir l'espace entre elles */
     position: relative;
-    margin: 0 10px;
+    /* On définit la hauteur max des disques dans le JS. Ici, on s'assure que la tour est grande */
 }
 
-/* Le socle */
+/* Le socle (la base de la tour) */
 .socle {
-    width: 100%;
-    height: 20px;
-    background-color: #6c757d;
+    width: 95%; 
+    height: 25px;
+    background-color: #95a5a6;
     border-radius: 5px;
-    z-index: 10;
+    z-index: 10; 
 }
 
-/* Le poteau */
+/* Le poteau (l'axe vertical) */
 .poteau {
-    width: 10px;
-    height: 300px;
-    background-color: #495057;
+    width: 10px; 
+    height: 350px; /* Grande hauteur pour les 8 disques + espacement */
+    background-color: #34495e;
     position: absolute;
-    bottom: 20px;
+    bottom: 25px; /* Débute juste au-dessus du socle (hauteur du socle) */
     z-index: 5;
 }
 
-/* ---------------------------------------------------------------- */
-/* NOUVEAUTÉ : STYLE DES DISQUES */
-/* ---------------------------------------------------------------- */
-/* Style de base pour un disque */
+/* ====================================================================== */
+/* STYLES ET ANIMATIONS DES DISQUES */
+/* ====================================================================== */
 .disque {
-    height: 30px; /* Hauteur uniforme pour tous les disques */
-    background-color: #ffc107; 
-    border: 1px solid #d39e00;
-    border-radius: 15px; /* Bords arrondis */
-    margin-top: 2px; /* Petit espace entre les disques */
+    height: 30px; 
+    /* Les couleurs de base restent, mais on affine l'ombre pour la profondeur */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); 
+    border-radius: 15px;
+    margin-top: 5px; /* Plus d'espace entre les disques */
     position: relative;
-    z-index: 15; /* S'assure qu'ils sont au-dessus du poteau */
-    /* Pour centrer horizontalement sur le poteau */
-    margin-left: auto;
-    margin-right: auto;
-    /* Assurez-vous que le conteneur .tour a bien: 
-       display: flex; 
-       flex-direction: column-reverse; 
-       align-items: center; 
-       pour un empilement correct. */
+    z-index: 15;
+    
+    /* Animation: transition douce lors de la sélection/désélection */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    
+    /* Le disque est centré grâce à align-items: center; sur le parent .tour */
 }
 
-/* On peut ajouter des couleurs distinctes pour la clarté visuelle */
-.disque[data-taille="1"] { background-color: #007bff; }
-.disque[data-taille="2"] { background-color: #28a745; }
-.disque[data-taille="3"] { background-color: #dc3545; }
-.disque[data-taille="4"] { background-color: #ffc107; }
-.disque[data-taille="5"] { background-color: #17a2b8; }
-.disque[data-taille="6"] { background-color: #6f42c1; }
-.disque[data-taille="7"] { background-color: #fd7e14; }
-.disque[data-taille="8"] { background-color: #20c997; }
-
+/* État sélectionné : animation et indication visuelle forte */
 .disque.selectionne {
-    outline: 4px solid #ff0000; /* Bordure rouge pour indiquer la sélection */
-    outline-offset: 2px;
+    outline: 4px solid #e74c3c; /* Bordure rouge pour la sélection */
+    outline-offset: 3px;
     cursor: grabbing;
+    /* Le disque "flotte" légèrement lorsqu'il est sélectionné */
+    transform: translateY(-15px) scale(1.02); 
+    box-shadow: 0 8px 15px rgba(231, 76, 60, 0.5); /* Ombre rouge plus prononcée */
 }
+
+/* Couleurs des disques pour la distinction (utilisé dans le JS avec data-taille) */
+.disque[data-taille="1"] { background-color: #e67e22; } /* Orange */
+.disque[data-taille="2"] { background-color: #f1c40f; } /* Jaune */
+.disque[data-taille="3"] { background-color: #2ecc71; } /* Vert Émeraude */
+.disque[data-taille="4"] { background-color: #3498db; } /* Bleu Clair */
+.disque[data-taille="5"] { background-color: #9b59b6; } /* Améthyste */
+.disque[data-taille="6"] { background-color: #e74c3c; } /* Rouge Tomate */
+.disque[data-taille="7"] { background-color: #1abc9c; } /* Turquoise */
+.disque[data-taille="8"] { background-color: #d35400; } /* Citrouille */
+
+/* Le code HTML et JavaScript précédent est nécessaire pour que ces styles fonctionnent */

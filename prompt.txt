@@ -50,3 +50,18 @@ Le processus est le suivant
 Tu dois cliquer sur un anneau puis tu cliques sur la tour sur laquelle tu dois déplacer l'anneau
 
 Pour les contraintes il y a une règle on ne peux pas poser un anneau sur un anneau plus petit que soi même
+
+
+Etape 4 
+
+Nous allons maintenant améliorer le visuel de l'application
+
+Tu vas pouvoir améliorer la mise en page de l'application, les couleurs et ajouter également des animations.
+
+Par contre je veux que ces contraintes soit respectés :
+
+D'abord pour les disques ils doivent avoir la même longueur de chaque côté du poteau ,
+
+Tu dois faire en sorte qu'il y ai assez d'espace entre les tours afin que les disques ne se superposent pas
+
+Régénère moi donc l'ensemble des fichiers que tu vas modifier.
