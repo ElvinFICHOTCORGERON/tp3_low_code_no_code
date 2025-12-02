@@ -103,3 +103,51 @@ Au niveau de l'animation du déplacement des disques elle doit montrer un "gliss
 Pour finir il y doit y avoir un système de gestion de mode sombre/clair
 
 Bien sur pour chaque bouton il doit y avoir un style d'ajouté.
+
+Etape 7 
+
+Tu es développeur en première année d'un master informatique en parcours ingénierie logiciel
+
+Dans le cadre d'un TP du doit réaliser la mini application suivante :
+
+Le jeu des tours d'Hanoi en html, css, js
+
+Au niveau de la structure de l'application tu auras un fichier pour chaque langage.
+
+Les fonctionnalités attendu sont les suivantes :
+
+Pouvoir déplacer les disques sur les tours
+
+Avoir une réalisation automatique de l'algorithme en mode récursif
+
+Ajouté la gestion de score qui est basé sur le nombre de coup minimal la formule est (2^n -1)
+
+Tu dois avoir un champ qui permet de choisir le nombre d'anneau entre 3 et 8
+
+Tu dois pouvoir réinitialiser la partie à tous moment
+
+Lors du déplacement des disques il doit y avoir une animation de glissement fluide
+
+L'application doit implémenter un mode sombre/clair
+
+Il doit y avoir un compteur de coup
+
+L'utilisateur doit être notifié en cas de victoire avec un message de félicitations.
+
+Contraintes
+
+Le jeu doit respecté les régles du jeu des tours d'Hanoi on commence sur la première tour pour finir sur la dernière tour et un disque ne peut pas être placé sur un disque plus petit que lui
+
+Il doit y avoir 3 tours
+
+L'utilisateur doit pouvoir suivre visuellement la résolution automatique lorsqu'il clique sur le bouton résolution automatique
+
+La séquence doit être la suivante l'utilisateur clique sur démarrer l'application génère le nombre de disque choisis sur la première tour en mettant le plus grand en bas et le plus petit en haut.
+
+La séquence de réinitialisations est la suivante, la partie est remis exactement comment à l'origine les tours ne doivent avoir aucun disque et le joueur doit clique sur démarrer pour jouer à nouveau
+
+Tu es bien sur tenu d'avoir une UI/UX correct.
+
+Réalise moi le développement dans son intégralité afin de satisfaire tous les attendus
+
+Tu dois bien sur pouvoir rejouer après avoir gagner.

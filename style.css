@@ -1,177 +1,219 @@
-/* ====================================================================== */
-/* STYLES DE BASE ET THÈMES */
-/* ====================================================================== */
+/* --- Variables et Styles de Base --- */
+:root {
+    /* Variables communes */
+    --base-color: #333;
+    --tower-bg: #8c8c8c;
+    --tower-post: #666;
+    --disc-colors: #ff6347, #ffa500, #ffd700, #3cb371, #4169e1, #9400d3, #ff1493, #00ced1;
+    --transition-speed: 0.3s;
+}
+
+/* Mode Clair (Par défaut) */
+.light-mode {
+    --bg-color: #f4f4f9;
+    --text-color: #333;
+    --panel-bg: #fff;
+    --border-color: #ccc;
+    --button-bg: #4a90e2;
+    --button-hover: #3a7bd5;
+}
+
+/* Mode Sombre */
+.dark-mode {
+    --bg-color: #1a1a2e;
+    --text-color: #e4e4f1;
+    --panel-bg: #2b2b4d;
+    --border-color: #444;
+    --button-bg: #bb86fc;
+    --button-hover: #9c27b0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed), color var(--transition-speed);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0;
-    padding: 30px;
-    transition: background-color 0.5s, color 0.5s; /* Transition pour le changement de thème */
-}
-
-/* Thème Clair (Par défaut) */
-.theme-clair {
-    background-color: #f0f4f8;
-    color: #2c3e50;
-}
-.theme-clair #controles {
-    background-color: #ffffff;
-    border-color: #c0d1e0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-/* Thème Sombre */
-.theme-sombre {
-    background-color: #2c3e50;
-    color: #ecf0f1;
-}
-.theme-sombre h1 {
-    color: #3498db;
-}
-.theme-sombre #controles {
-    background-color: #34495e;
-    border-color: #1a252f;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-.theme-sombre #aireDeJeu {
-    background-color: #34495e;
-    border-color: #1a252f;
-}
-.theme-sombre .socle, .theme-sombre .poteau {
-    background-color: #7f8c8d;
-}
-
-/* Zone de contrôle */
-#controles {
-    margin-bottom: 40px;
+    min-height: 100vh;
     padding: 20px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 12px;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
 }
 
-/* Styles des boutons */
-.btn-action {
-    padding: 10px 20px;
-    color: white;
+header h1 {
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+/* --- Panneau de Contrôle --- */
+.controls-panel {
+    background: var(--panel-bg);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 15px;
+}
+
+.control-group, .score-info {
+    text-align: center;
+}
+
+.score-info p {
+    margin: 5px 0;
+}
+
+input[type="number"] {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    width: 60px;
+    text-align: center;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+button {
+    padding: 10px 15px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    transition: background-color 0.3s, transform 0.1s;
+    color: #fff;
+    background-color: var(--button-bg);
+    transition: background-color var(--transition-speed), opacity var(--transition-speed);
 }
 
-#demarrerJeu { background-color: #2ecc71; } /* Vert pour Démarrer */
-#demarrerJeu:hover { background-color: #27ae60; }
+button:hover:not(:disabled) {
+    background-color: var(--button-hover);
+}
 
-#demoAutomatique { background-color: #3498db; } /* Bleu pour Démo */
-#demoAutomatique:hover { background-color: #2980b9; }
-
-#resetJeu { background-color: #e74c3c; } /* Rouge pour Réinitialiser */
-#resetJeu:hover { background-color: #c0392b; }
-
-.btn-action:disabled {
-    background-color: #bdc3c7 !important;
+button:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-.btn-theme {
-    padding: 8px 15px;
-    background-color: #f39c12;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+.action-buttons {
+    display: flex;
+    gap: 10px;
 }
 
-/* STATS */
-#stats {
-    padding: 5px 15px;
-    border: 1px solid currentColor;
-    border-radius: 6px;
-    font-weight: bold;
+/* --- Zone de Jeu --- */
+#game-board {
     display: flex;
-    gap: 20px;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+    max-width: 900px;
+    height: 350px;
+    padding-top: 20px; /* Espace pour le déplacement vertical */
 }
 
-/* ====================================================================== */
-/* AIRE DE JEU ET TOURS */
-/* ====================================================================== */
-#aireDeJeu {
+.tower {
+    width: 250px;
+    height: 100%;
     display: flex;
-    justify-content: space-around;
-    width: 900px; 
-    max-width: 95%; 
-    height: 450px; 
-    padding: 20px;
-    background-color: #ecf0f1;
-    border: 5px solid #bdc3c7;
-    border-radius: 15px;
-    position: relative;
-}
-
-.tour {
-    display: flex;
-    flex-direction: column-reverse; 
+    flex-direction: column-reverse; /* Les disques s'empilent du bas vers le haut */
     align-items: center;
-    width: 30%; 
+    justify-content: flex-start;
     position: relative;
-    /* Permet aux disques d'être positionnés pour l'animation */
+    padding-bottom: 30px; /* Espace pour la base */
+    cursor: pointer;
+    border-bottom: 10px solid var(--tower-bg);
 }
 
-.socle {
-    width: 95%; 
-    height: 25px;
-    background-color: #95a5a6;
-    border-radius: 5px;
-    z-index: 10; 
-}
-
-.poteau {
-    width: 10px; 
-    height: 350px; 
-    background-color: #34495e;
+/* Le poteau de la tour (visuel) */
+.tower::before {
+    content: '';
     position: absolute;
-    bottom: 25px; 
-    z-index: 5;
+    bottom: 30px;
+    width: 8px;
+    height: 100%;
+    background-color: var(--tower-post);
+    z-index: 0;
 }
 
-/* ====================================================================== */
-/* STYLES ET ANIMATIONS DES DISQUES */
-/* ====================================================================== */
-.disque {
-    height: 30px; 
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); 
-    border-radius: 15px;
-    margin-top: 5px; 
-    position: relative;
-    z-index: 15;
-    
-    /* Le glissement fluide: transition sur transform pour le 'lift' et l'ombre */
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s, top 0.5s ease-in-out, left 0.5s ease-in-out; 
+.base {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: var(--tower-bg);
+    color: var(--text-color);
+    font-weight: bold;
+    z-index: 1;
 }
 
-/* État sélectionné (le disque "flotte" au-dessus) */
-.disque.selectionne {
-    outline: 4px solid #e74c3c; 
-    outline-offset: 3px;
-    cursor: grabbing;
-    transform: translateY(-15px) scale(1.02); /* Décolle légèrement */
-    box-shadow: 0 8px 15px rgba(231, 76, 60, 0.5); 
+/* --- Les Disques --- */
+.disc {
+    position: absolute; /* Positionnement absolu pour l'animation */
+    height: 25px;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: width var(--transition-speed), transform var(--transition-speed) ease-in-out, background-color var(--transition-speed);
+    z-index: 2;
+    cursor: grab;
 }
 
-/* Couleurs des disques (inchangées) */
-.disque[data-taille="1"] { background-color: #e67e22; }
-.disque[data-taille="2"] { background-color: #f1c40f; }
-.disque[data-taille="3"] { background-color: #2ecc71; }
-.disque[data-taille="4"] { background-color: #3498db; }
-.disque[data-taille="5"] { background-color: #9b59b6; }
-.disque[data-taille="6"] { background-color: #e74c3c; }
-.disque[data-taille="7"] { background-color: #1abc9c; }
-.disque[data-taille="8"] { background-color: #d35400; }
+/* Application des couleurs basées sur l'index (taille) */
+/* Les largeurs seront définies en JS pour le dynamisme */
+.disc[data-size="1"] { background-color: tomato; }
+.disc[data-size="2"] { background-color: gold; }
+.disc[data-size="3"] { background-color: yellowgreen; }
+.disc[data-size="4"] { background-color: deepskyblue; }
+.disc[data-size="5"] { background-color: violet; }
+.disc[data-size="6"] { background-color: coral; }
+.disc[data-size="7"] { background-color: mediumspringgreen; }
+.disc[data-size="8"] { background-color: dodgerblue; }
+
+/* Disque sélectionné (en cours de déplacement) */
+.disc.selected {
+    opacity: 0.8;
+    transform: translateY(-100px); /* Soulève le disque pour indiquer la sélection */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Modal de Victoire --- */
+.modal {
+    display: none; /* Caché par défaut */
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: var(--panel-bg);
+    margin: 15% auto;
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+    color: var(--button-bg);
+    margin-bottom: 15px;
+}

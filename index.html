@@ -3,46 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Tours de Hanoï - TP M1 IL</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>Tours de Hanoï - TP M1 IL</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-clair"> <header>
-        <h1>Le Jeu des Tours de Hanoï</h1>
+<body class="light-mode">
+    <header>
+        <h1>🗼 Le Jeu des Tours de Hanoï</h1>
     </header>
 
     <main>
-        
-        <section id="controles">
-            <label for="nombreDisques">Anneaux (3-8) :</label>
-            <input type="number" id="nombreDisques" name="nombreDisques" min="3" max="8" value="3">
-            
-            <button id="demarrerJeu" class="btn-action">Démarrer</button>
-            <button id="demoAutomatique" class="btn-action" disabled>Démo Auto</button>
-            <button id="resetJeu" class="btn-action" disabled>Réinitialiser</button> <div id="stats">
-                <span id="compteurCoups">Coups: 0</span> <span id="scoreMinimal">Optimal: 7</span> </div>
-            
-            <button id="toggleTheme" class="btn-theme">Mode Sombre</button> </section>
-        
-        <section id="aireDeJeu">
-            
-            <div class="tour" id="tour-1">
-                <div class="poteau"></div>
-                <div class="socle"></div>
+        <div class="controls-panel">
+            <div class="control-group">
+                <label for="numDiscs">Nombre d'anneaux (3-8) :</label>
+                <input type="number" id="numDiscs" min="3" max="8" value="3">
             </div>
-            
-            <div class="tour" id="tour-2">
-                <div class="poteau"></div>
-                <div class="socle"></div>
-            </div>
-            
-            <div class="tour" id="tour-3">
-                <div class="poteau"></div>
-                <div class="socle"></div>
-            </div>
-            
-        </section>
 
+            <div class="score-info">
+                <p>Coup minimum : <span id="minMoves">7</span></p>
+                <p>Coups joués : <span id="currentMoves">0</span></p>
+            </div>
+
+            <div class="action-buttons">
+                <button id="startButton">Démarrer la Partie</button>
+                <button id="resetButton" disabled>Réinitialiser</button>
+                <button id="autoSolveButton" disabled>Résolution Automatique</button>
+            </div>
+
+            <button id="toggleTheme">Mode Sombre/Clair</button>
+        </div>
+
+        <div id="game-board">
+            <div class="tower" id="tower-1">
+                <div class="base">Tour 1</div>
+            </div>
+            <div class="tower" id="tower-2">
+                <div class="base">Tour 2</div>
+            </div>
+            <div class="tower" id="tower-3">
+                <div class="base">Tour 3</div>
+            </div>
+        </div>
     </main>
+
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h2>🎉 Félicitations ! 🎉</h2>
+            <p>Vous avez terminé le jeu en <span id="finalMoves"></span> coups.</p>
+            <p id="optimalityMessage"></p>
+            <button id="closeModal">Rejouer (Réinitialiser)</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
