@@ -65,3 +65,21 @@ D'abord pour les disques ils doivent avoir la même longueur de chaque côté du
 Tu dois faire en sorte qu'il y ai assez d'espace entre les tours afin que les disques ne se superposent pas
 
 Régénère moi donc l'ensemble des fichiers que tu vas modifier.
+
+Etape 5 
+
+Après avoir un visuel correct nous allons rentrer dans une partie plus technique l'implémentation de l'algortihme qui permet de jouer au jeu.
+
+Pour se faire nous allons ajouter un bouton démo automatique.
+
+Au click sur ce bouton tu vas lancer l'algorithme
+
+Au niveau des contraintes tu dois
+
+Implémenter l'algo en mode récursif
+
+Tu ne dois pas pouvoir lancer la démonstration si la partie n'est pas lancé
+
+Et enfin l'utilisateur doit pouvoir suivre l'avancé de la résolution visuellement
+
+Génère moi donc la totalité des fichiers qui vont changer

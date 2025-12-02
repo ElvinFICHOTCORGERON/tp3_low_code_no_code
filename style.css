@@ -129,9 +129,8 @@ h1 {
     outline: 4px solid #e74c3c; /* Bordure rouge pour la sélection */
     outline-offset: 3px;
     cursor: grabbing;
-    /* Le disque "flotte" légèrement lorsqu'il est sélectionné */
     transform: translateY(-15px) scale(1.02); 
-    box-shadow: 0 8px 15px rgba(231, 76, 60, 0.5); /* Ombre rouge plus prononcée */
+    box-shadow: 0 8px 15px rgba(231, 76, 60, 0.5); 
 }
 
 /* Couleurs des disques pour la distinction (utilisé dans le JS avec data-taille) */
