@@ -1,4 +1,4 @@
-/* Style général du corps de la page */
+/* Style général du corps de la page (Rappel de l'étape 1) */
 body {
     font-family: sans-serif;
     display: flex;
@@ -47,9 +47,9 @@ h1 {
 /* Aire de jeu principale */
 #aireDeJeu {
     display: flex;
-    justify-content: space-around; /* Répartit les tours sur l'espace */
-    width: 80%; /* Largeur de la zone de jeu */
-    height: 400px; /* Hauteur de la zone de jeu */
+    justify-content: space-around;
+    width: 80%;
+    height: 400px;
     padding: 20px;
     background-color: #e9ecef;
     border: 2px solid #333;
@@ -59,29 +59,60 @@ h1 {
 /* Style de chaque tour */
 .tour {
     display: flex;
-    flex-direction: column-reverse; /* Les disques s'empilent du bas vers le haut */
+    flex-direction: column-reverse; /* CRUCIAL : Empile les éléments du bas vers le haut */
     align-items: center;
-    width: 30%; /* Largeur pour laisser de l'espace entre elles */
+    width: 30%;
     position: relative;
-    /* Un peu de marge pour centrer le socle/poteau */
     margin: 0 10px;
 }
 
-/* Le socle (la base de la tour) */
+/* Le socle */
 .socle {
     width: 100%;
     height: 20px;
     background-color: #6c757d;
     border-radius: 5px;
-    z-index: 10; /* Assure que le socle est au-dessus du poteau visuellement si besoin */
+    z-index: 10;
 }
 
-/* Le poteau (l'axe vertical) */
+/* Le poteau */
 .poteau {
-    width: 10px; /* Finesse du poteau */
-    height: 300px; /* Hauteur pour empiler les disques */
+    width: 10px;
+    height: 300px;
     background-color: #495057;
-    position: absolute; /* Position absolue par rapport à la tour parente */
-    bottom: 20px; /* Se place juste au-dessus du socle (hauteur du socle) */
+    position: absolute;
+    bottom: 20px;
     z-index: 5;
 }
+
+/* ---------------------------------------------------------------- */
+/* NOUVEAUTÉ : STYLE DES DISQUES */
+/* ---------------------------------------------------------------- */
+/* Style de base pour un disque */
+.disque {
+    height: 30px; /* Hauteur uniforme pour tous les disques */
+    background-color: #ffc107; 
+    border: 1px solid #d39e00;
+    border-radius: 15px; /* Bords arrondis */
+    margin-top: 2px; /* Petit espace entre les disques */
+    position: relative;
+    z-index: 15; /* S'assure qu'ils sont au-dessus du poteau */
+    /* Pour centrer horizontalement sur le poteau */
+    margin-left: auto;
+    margin-right: auto;
+    /* Assurez-vous que le conteneur .tour a bien: 
+       display: flex; 
+       flex-direction: column-reverse; 
+       align-items: center; 
+       pour un empilement correct. */
+}
+
+/* On peut ajouter des couleurs distinctes pour la clarté visuelle */
+.disque[data-taille="1"] { background-color: #007bff; }
+.disque[data-taille="2"] { background-color: #28a745; }
+.disque[data-taille="3"] { background-color: #dc3545; }
+.disque[data-taille="4"] { background-color: #ffc107; }
+.disque[data-taille="5"] { background-color: #17a2b8; }
+.disque[data-taille="6"] { background-color: #6f42c1; }
+.disque[data-taille="7"] { background-color: #fd7e14; }
+.disque[data-taille="8"] { background-color: #20c997; }

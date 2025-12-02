@@ -19,3 +19,19 @@ Un bouton démarrer
 Et un champs qui permet de choisir le nombre d'anneau
 
 En résultat je veux donc avoir une page web qui contient une zone avec les 3 tours une tours possède un socle et un poteau, un input pour choisir le nombre d'anneau et un bouton qui permet de démarrer
+
+Prompt 2
+
+Maintenant nous allons passer à l'étape suivante dans le même projet
+
+Rappel tu dois garder la structure de l'étape précédente et ajouter les nouvelles fonctionnalité
+
+Elle consiste à générer les anneaux dans le jeux lorsque la partie démarre
+
+Pour les contraintes les anneaux doivent :
+
+Apparaitre sur la première tour seulement quand la partie démarre au début l'affichage est vide
+
+Ils doivent être empilés dans le bonne ordre avec le plus grand en bas et le plus petit en haut
+
+Il y doit y avoir le nombre d'anneau choisis dans le champs d'input
