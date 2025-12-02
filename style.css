@@ -1,0 +1,87 @@
+/* Style général du corps de la page */
+body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+}
+
+/* Zone de contrôle */
+#controles {
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#nombreDisques {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#demarrerJeu {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#demarrerJeu:hover {
+    background-color: #0056b3;
+}
+
+/* Aire de jeu principale */
+#aireDeJeu {
+    display: flex;
+    justify-content: space-around; /* Répartit les tours sur l'espace */
+    width: 80%; /* Largeur de la zone de jeu */
+    height: 400px; /* Hauteur de la zone de jeu */
+    padding: 20px;
+    background-color: #e9ecef;
+    border: 2px solid #333;
+    border-radius: 10px;
+}
+
+/* Style de chaque tour */
+.tour {
+    display: flex;
+    flex-direction: column-reverse; /* Les disques s'empilent du bas vers le haut */
+    align-items: center;
+    width: 30%; /* Largeur pour laisser de l'espace entre elles */
+    position: relative;
+    /* Un peu de marge pour centrer le socle/poteau */
+    margin: 0 10px;
+}
+
+/* Le socle (la base de la tour) */
+.socle {
+    width: 100%;
+    height: 20px;
+    background-color: #6c757d;
+    border-radius: 5px;
+    z-index: 10; /* Assure que le socle est au-dessus du poteau visuellement si besoin */
+}
+
+/* Le poteau (l'axe vertical) */
+.poteau {
+    width: 10px; /* Finesse du poteau */
+    height: 300px; /* Hauteur pour empiler les disques */
+    background-color: #495057;
+    position: absolute; /* Position absolue par rapport à la tour parente */
+    bottom: 20px; /* Se place juste au-dessus du socle (hauteur du socle) */
+    z-index: 5;
+}

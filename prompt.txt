@@ -1,0 +1,21 @@
+Prompt étape 1 
+
+Tu es étudiant en première de master informatique en ingénierie logiciel.
+
+Dans le cadre d'un TP je dois réaliser une petite application en html/css/javascript pour avoir une version interractive du jeu des tours de Hanoi
+
+Le but consiste a réaliser le développement étape par étape
+
+Le code sera dans chaque fichier pour chaque langage
+
+La première étape consiste à
+
+Créer la page web
+
+Mettre une zone affichant les 3 tours
+
+Un bouton démarrer
+
+Et un champs qui permet de choisir le nombre d'anneau
+
+En résultat je veux donc avoir une page web qui contient une zone avec les 3 tours une tours possède un socle et un poteau, un input pour choisir le nombre d'anneau et un bouton qui permet de démarrer
